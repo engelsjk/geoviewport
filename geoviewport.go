@@ -71,11 +71,13 @@ func Bounds(viewport []float64, zoom float64, dimensions []float64, tileSize int
 		[]float64{
 			px[0] - (dimensions[0] / 2.0),
 			px[1] - (dimensions[1] / 2.0),
-		}, zoom)
+		}, zoom,
+	)
 	br := merc.LL(
 		[]float64{
-			px[0] - (dimensions[0] / 2.0),
-			px[1] - (dimensions[1] / 2.0),
-		}, zoom)
+			px[0] + (dimensions[0] / 2.0),
+			px[1] + (dimensions[1] / 2.0),
+		}, zoom,
+	)
 	return []float64{tl[0], br[1], br[0], tl[1]}
 }
