@@ -35,12 +35,9 @@ func getAdjusted(base float64, ratios []float64, allowFloat bool) float64 {
 	return math.Floor(adjusted)
 }
 
-type VP struct {
-	Center []float64
-	Zoom   float64
-}
-
-func Viewport(bounds, dimensions []float64, minZoom, maxZoom float64, tileSize int, allowFloat bool) VP {
+// Viewport takes a WSEN slice of bounds and an [x, y] slice of pixel dimensions,
+// then returns a center [lon, lat] and zoom of a viewport.
+func Viewport(bounds, dimensions []float64, minZoom, maxZoom float64, tileSize int, allowFloat bool) ([]float64, float64) {
 	if minZoom == 0 {
 		minZoom = 0
 	}
@@ -61,9 +58,11 @@ func Viewport(bounds, dimensions []float64, minZoom, maxZoom float64, tileSize i
 	center := merc.LL([]float64{centerPixelX, centerPixelY}, base)
 	zoom := math.Max(minZoom, math.Min(maxZoom, adjusted))
 
-	return VP{Center: center, Zoom: zoom}
+	return center, zoom
 }
 
+// Bounds takes a centerpoint [lon, lat], a zoom and dimensions as [x, y]
+// then return a bounding box.
 func Bounds(viewport []float64, zoom float64, dimensions []float64, tileSize int) []float64 {
 	merc := fetchMerc(tileSize)
 	px := merc.Px(viewport, zoom)

@@ -5,6 +5,11 @@ import (
 	"testing"
 )
 
+type viewport struct {
+	Center []float64
+	Zoom   float64
+}
+
 var decDegreesFloatTolerance = 8.0
 
 func precisionRound(number, precision float64) float64 {
@@ -28,7 +33,7 @@ func isApproximatelyEqual(a, b float64) bool {
 	return math.Abs(a-b) < 1e-10
 }
 
-func areViewportsApproximatelyEqual(v1, v2 VP) bool {
+func areViewportsApproximatelyEqual(v1, v2 viewport) bool {
 	return isApproximatelyEqual(v1.Center[0], v2.Center[0]) &&
 		isApproximatelyEqual(v1.Center[1], v2.Center[1]) &&
 		isApproximatelyEqual(v1.Zoom, v2.Zoom)
@@ -36,22 +41,27 @@ func areViewportsApproximatelyEqual(v1, v2 VP) bool {
 
 func TestViewport(t *testing.T) {
 
-	var got, want VP
+	var center []float64
+	var zoom float64
+	var got, want viewport
 
-	got = Viewport(sampleBounds, []float64{640, 480}, 0, 0, 0, false)
-	want = VP{Center: expectedCenter, Zoom: 11}
+	center, zoom = Viewport(sampleBounds, []float64{640, 480}, 0, 0, 0, false)
+	got = viewport{Center: center, Zoom: zoom}
+	want = viewport{Center: expectedCenter, Zoom: 11}
 	if !areViewportsApproximatelyEqual(got, want) {
 		t.Errorf("#1: got %v; want %v", got, want)
 	}
 
-	got = Viewport(sampleBounds, []float64{64, 48}, 0, 0, 0, false)
-	want = VP{Center: expectedCenter, Zoom: 8}
+	center, zoom = Viewport(sampleBounds, []float64{64, 48}, 0, 0, 0, false)
+	got = viewport{Center: center, Zoom: zoom}
+	want = viewport{Center: expectedCenter, Zoom: 8}
 	if !areViewportsApproximatelyEqual(got, want) {
 		t.Errorf("#2: got %v; want %v", got, want)
 	}
 
-	got = Viewport(sampleBounds, []float64{10, 10}, 0, 0, 0, false)
-	want = VP{Center: expectedCenter, Zoom: 5}
+	center, zoom = Viewport(sampleBounds, []float64{10, 10}, 0, 0, 0, false)
+	got = viewport{Center: center, Zoom: zoom}
+	want = viewport{Center: expectedCenter, Zoom: 5}
 	if !areViewportsApproximatelyEqual(got, want) {
 		t.Errorf("#3: got %v; want %v", got, want)
 	}
@@ -59,16 +69,20 @@ func TestViewport(t *testing.T) {
 
 func TestViewportSouthernHemisphere(t *testing.T) {
 
-	var got, want VP
+	var center []float64
+	var zoom float64
+	var got, want viewport
 
-	got = Viewport([]float64{10, -20, 20, -10}, []float64{500, 250}, 0, 0, 0, false)
-	want = VP{Center: []float64{14.999999776482582, -15.058651551491899}, Zoom: 5}
+	center, zoom = Viewport([]float64{10, -20, 20, -10}, []float64{500, 250}, 0, 0, 0, false)
+	got = viewport{Center: center, Zoom: zoom}
+	want = viewport{Center: []float64{14.999999776482582, -15.058651551491899}, Zoom: 5}
 	if !areViewportsApproximatelyEqual(got, want) {
 		t.Errorf("#1: got %v; want %v", got, want)
 	}
 
-	got = Viewport([]float64{-10, -60, 10, -30}, []float64{500, 250}, 0, 0, 0, false)
-	want = VP{Center: []float64{0, -47.05859720188612}, Zoom: 2}
+	center, zoom = Viewport([]float64{-10, -60, 10, -30}, []float64{500, 250}, 0, 0, 0, false)
+	got = viewport{Center: center, Zoom: zoom}
+	want = viewport{Center: []float64{0, -47.05859720188612}, Zoom: 2}
 	if !areViewportsApproximatelyEqual(got, want) {
 		t.Errorf("#2: got %v; want %v", got, want)
 	}
@@ -147,10 +161,13 @@ func TestBoundsForFloatZooms(t *testing.T) {
 
 func TestViewportForFloatZooms(t *testing.T) {
 
-	var got, want VP
+	var center []float64
+	var zoom float64
+	var got, want viewport
 
-	got = Viewport(sampleBounds, []float64{10, 10}, 0, 0, 256, true)
-	want = VP{Center: expectedCenter, Zoom: 5.984828902182182}
+	center, zoom = Viewport(sampleBounds, []float64{10, 10}, 0, 0, 256, true)
+	got = viewport{Center: center, Zoom: zoom}
+	want = viewport{Center: expectedCenter, Zoom: 5.984828902182182}
 	if !areViewportsApproximatelyEqual(got, want) {
 		t.Errorf("#2: got %v; want %v", got, want)
 	}
