@@ -13,10 +13,8 @@ go get github.com/engelsjk/geoviewport
 ```Go
 center, zoom := geoviewport.Viewport(
     []float64{
-        5.668343999999995,
-        45.111511000000014,
-        5.852471999999996,
-        45.26800200000002,
+        5.668343999999995, 45.111511000000014,
+        5.852471999999996, 45.26800200000002,
     },
     []float64{640, 480},
     0, 0,
@@ -27,6 +25,20 @@ center, zoom := geoviewport.Viewport(
 // yields
 center: [5.76040800000003 45.18981028279085]
 zoom: 11
+```
+
+```Go
+bounds := geoviewport.Bounds(
+    []float64{
+        -75.03, 35.25,
+    },
+    14,
+    []float64{600, 400},
+    256,
+)
+
+// yields
+bounds: [-75.05574920654297 35.2359802066683 -75.00425079345703 35.26401736929553]
 ```
 
 ## Testing Issue
