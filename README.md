@@ -29,9 +29,7 @@ zoom: 11
 
 ```Go
 bounds := geoviewport.Bounds(
-    []float64{
-        -75.03, 35.25,
-    },
+    []float64{-75.03, 35.25},
     14,
     []float64{600, 400},
     256,
